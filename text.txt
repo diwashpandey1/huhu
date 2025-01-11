@@ -1,0 +1,81 @@
+import React, { useState } from 'react';
+
+function App() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [age, setAge] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Create a data object
+    const data = {
+      name: name,
+      email: email,
+      age: age
+    };
+
+    try {
+      // Send POST request to Flask back-end
+      const response = await fetch('http://127.0.0.1:5000/api/document', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      // Handle response from the server
+      if (response.ok) {
+        console.log('Document added successfully:', result);
+        alert('Data added successfully!');
+      } else {
+        console.error('Error:', result);
+        alert('Error adding data!');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error adding data!');
+    }
+  };
+
+  return (
+    <div className="App">
+      <h1>Add User</h1>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Name:</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Age:</label>
+          <input
+            type="number"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
+}
+
+export default App;
