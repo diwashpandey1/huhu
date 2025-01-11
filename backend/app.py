@@ -9,6 +9,10 @@ app = Flask(__name__)
 # Enable CORS for all routes
 CORS(app)
 
+@app.route('/')
+def home():
+    return 'Flask app connected to MongoDB!'
+
 # Route to insert data into MongoDB
 @app.route('/api/document', methods=['POST'])
 def add_document():
